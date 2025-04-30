@@ -1,14 +1,27 @@
 "use client";
 
-import { Bell, LineChart, Waves } from "lucide-react";
-
+import { Bell, Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusCard } from "@/components/status-card";
 import { ResponseTimeChart } from "@/components/response-time-chart";
 import { StorageForecastSlider } from "@/components/storage-forecast-slider";
+import { useState } from "react";
+import { StorageConsumptionCard } from "@/components/storage-consumption-card";
+import { GrowthRateCard } from "@/components/growth-rate-card";
 
 export default function Dashboard() {
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [selectedDirectory, setSelectedDirectory] = useState("/info");
+
+  useState(() => {
+    const interval = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
+
   return (
     <div className="min-h-screen bg-[#0f1520] text-slate-200">
       <main className="container mx-auto max-w-7xl p-4">
@@ -35,62 +48,36 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <StatusCard
-            title="Current Time"
-            status="2023-10-01 12:00:00"
+            title="Current Date & Time"
+            status={
+              <div>
+                <div>
+                  {currentDateTime.toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </div>
+                <div>
+                  {currentDateTime.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
+                </div>
+              </div>
+            }
             statusColor="text-green-500"
-            description="All systems operational"
+            description="Today"
           />
           <StatusCard
-            title="Last Data Insertion"
+            title="Last Updation"
             status="5 minutes ago"
             statusColor="text-white"
-            description="Data inserted every 15 minutes"
-          />
-          <StatusCard
-            title="Last 24 hours"
-            status="320 GB"
-            statusColor="text-white"
-            description="Total storage consumption"
-            
-          />
-        </div>
-
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <StatusCard
-            title="Growth Rate"
-            status="30%"
-            statusColor="text-green-500"
-            description="in last 24 hours"
-            className="md:col-span-1"
-          />
-          <StatusCard
-            title="Updation Rate"
-            status="10%"
-            statusColor="text-green-500"
-            description="in last 24 hours"
-            className="md:col-span-1"
-          />
-          <StatusCard
-            title="Deletion Rate"
-            status="40%"
-            statusColor="text-green-500"
-            description="in last 24 hours"
-            className="md:col-span-1"
-          />
-          <StatusCard
-            title="Pick a date range"
-            status="200 GB"
-            statusColor="text-green-500"
-            description="Total storage consumption"
-            className="md:col-span-1"
-            action={
-              <input
-          type="date"
-          className="h-8 w-1/2 rounded-md border border-slate-700 bg-slate-800 px-2 text-xs text-slate-400"
-              />
-            }
+            description="Data is inserted every 15 minutes"
           />
         </div>
 
@@ -101,33 +88,24 @@ export default function Dashboard() {
                 Live Storage Monitor
               </CardTitle>
             </div>
-            
+            <select
+              className="h-8 rounded-md border border-slate-700 bg-slate-800 px-2 text-xs text-slate-400"
+              value={selectedDirectory}
+              onChange={(e) => setSelectedDirectory(e.target.value)}
+            >
+              <option value="/info">Info</option>
+              <option value="/scratch">Scratch</option>
+              <option value="/customer">Customer</option>
+              <option value="/projects">Project</option>
+            </select>
           </CardHeader>
           <CardContent>
-            <ResponseTimeChart />
-            <div className="mt-4 grid grid-cols-3 gap-4 border-t border-slate-800 pt-4">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <Waves className="h-4 w-4 text-slate-400" />
-                  <span className="text-xl font-semibold">392 ms</span>
-                </div>
-                <span className="text-sm text-slate-400">Average</span>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <LineChart className="h-4 w-4 text-green-500" />
-                  <span className="text-xl font-semibold">255 ms</span>
-                </div>
-                <span className="text-sm text-slate-400">Minimum</span>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <LineChart className="h-4 w-4 text-red-500" />
-                  <span className="text-xl font-semibold">1167 ms</span>
-                </div>
-                <span className="text-sm text-slate-400">Maximum</span>
-              </div>
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <StorageConsumptionCard directory={selectedDirectory} />
+              <GrowthRateCard directory={selectedDirectory} />
             </div>
+
+            <ResponseTimeChart directory={selectedDirectory} />
           </CardContent>
         </Card>
 
