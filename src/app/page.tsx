@@ -9,6 +9,7 @@ import { StorageForecastSlider } from "@/components/storage-forecast-slider";
 import { useState } from "react";
 import { StorageConsumptionCard } from "@/components/storage-consumption-card";
 import { GrowthRateCard } from "@/components/growth-rate-card";
+import { SummaryCards } from "@/components/summary-cards";
 
 export default function Dashboard() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
@@ -106,6 +107,7 @@ export default function Dashboard() {
             </div>
 
             <ResponseTimeChart directory={selectedDirectory} />
+            <SummaryCards directory={selectedDirectory} />
           </CardContent>
         </Card>
 
