@@ -127,7 +127,9 @@ export default function Dashboard() {
             <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
               <StorageConsumptionCard directory={selectedDirectory} />
               <GrowthRateCard directory={selectedDirectory} />
+              <br/>
             </div>
+            
 
             <ResponseTimeChart directory={selectedDirectory} />
             <SummaryCards directory={selectedDirectory} />
