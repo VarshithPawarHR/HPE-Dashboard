@@ -88,6 +88,7 @@ export default function Dashboard() {
                 Live Storage Monitor
               </CardTitle>
             </div>
+            {/*
             <select
               className="h-8 rounded-md border border-slate-700 bg-slate-800 px-2 text-xs text-slate-400"
               value={selectedDirectory}
@@ -98,6 +99,28 @@ export default function Dashboard() {
               <option value="/customer">Customer</option>
               <option value="/projects">Project</option>
             </select>
+            */}
+
+            <div className="flex space-x-2">
+              {[
+                { label: "Info", value: "/info" },
+                { label: "Scratch", value: "/scratch" },
+                { label: "Customer", value: "/customer" },
+                { label: "Project", value: "/projects" },
+              ].map((item) => (
+                <button
+                  key={item.value}
+                  onClick={() => setSelectedDirectory(item.value)}
+                  className={`px-4 py-1 text-xs rounded-md border transition-all duration-200 ${
+                    selectedDirectory === item.value
+                      ? "bg-slate-700 text-white border-slate-600"
+                      : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </CardHeader>
           <CardContent>
             <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">

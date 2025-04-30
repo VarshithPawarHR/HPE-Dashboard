@@ -22,7 +22,7 @@ export function StatusCard({
   className,
 }: StatusCardProps) {
   return (
-    <Card className={cn("border-slate-800 bg-[#131926]", className)}>
+    <Card className={cn("border-slate-800 bg-[#161d2d]", className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-slate-400">
           {title}
