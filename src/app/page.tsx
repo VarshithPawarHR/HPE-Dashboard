@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronDown, LineChart, Waves } from "lucide-react";
+import { Bell, LineChart, Waves } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,75 +37,59 @@ export default function Dashboard() {
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
           <StatusCard
-            title="Current status"
-            status="Up"
+            title="Current Time"
+            status="2023-10-01 12:00:00"
             statusColor="text-green-500"
-            description="Currently up for 3d 11h 37m"
+            description="All systems operational"
           />
           <StatusCard
-            title="Last check"
-            status="Coming soon"
+            title="Last Data Insertion"
+            status="5 minutes ago"
             statusColor="text-white"
-            description="Checked every 5 minutes"
+            description="Data inserted every 15 minutes"
           />
           <StatusCard
             title="Last 24 hours"
-            status="100%"
+            status="320 GB"
             statusColor="text-white"
-            description="0 incidents, 0m down"
-            chart={
-              <div className="flex h-6 w-full gap-0.5">
-                {Array(24)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-full w-full rounded-sm bg-green-500"
-                    />
-                  ))}
-              </div>
-            }
+            description="Total storage consumption"
+            
           />
         </div>
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
           <StatusCard
-            title="Last 7 days"
-            status="100%"
+            title="Growth Rate"
+            status="30%"
             statusColor="text-green-500"
-            description="0 incidents, 0m down"
+            description="in last 24 hours"
             className="md:col-span-1"
           />
           <StatusCard
-            title="Last 30 days"
-            status="100%"
+            title="Updation Rate"
+            status="10%"
             statusColor="text-green-500"
-            description="0 incidents, 0m down"
+            description="in last 24 hours"
             className="md:col-span-1"
           />
           <StatusCard
-            title="Last 365 days"
-            status="----%"
-            statusColor="text-slate-300"
-            description={
-              <span className="text-green-500">Unlock with paid plans</span>
-            }
+            title="Deletion Rate"
+            status="40%"
+            statusColor="text-green-500"
+            description="in last 24 hours"
             className="md:col-span-1"
           />
           <StatusCard
             title="Pick a date range"
-            status="----%"
-            statusColor="text-slate-300"
-            description="- incidents, - down"
+            status="200 GB"
+            statusColor="text-green-500"
+            description="Total storage consumption"
             className="md:col-span-1"
             action={
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 gap-1 text-xs text-slate-400"
-              >
-                <ChevronDown className="h-3 w-3" />
-              </Button>
+              <input
+          type="date"
+          className="h-8 w-1/2 rounded-md border border-slate-700 bg-slate-800 px-2 text-xs text-slate-400"
+              />
             }
           />
         </div>
@@ -116,23 +100,8 @@ export default function Dashboard() {
               <CardTitle className="text-base font-medium text-slate-300">
                 Live Storage Monitor
               </CardTitle>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 gap-1 border-amber-500/20 bg-amber-500/10 px-2 text-xs text-amber-500"
-              >
-                <Bell className="h-3 w-3" />
-                Setup alerts
-              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 gap-1 text-xs text-slate-400"
-            >
-              Last 24 hours
-              <ChevronDown className="h-3 w-3" />
-            </Button>
+            
           </CardHeader>
           <CardContent>
             <ResponseTimeChart />
