@@ -7,7 +7,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCurrentStorage } from "@/api/getCurrentStorage";
 import { getDailyPrediction } from "@/api/getDailyPrediction";
+import { getWeeklyPrediction } from "@/api/getWeeklyPrediction";
+import { getMonthlyPrediction } from "@/api/getMontlyPrediction";
+import { get3MonthsPrediction } from "@/api/get3MonthsPrediction";
 
 const COLORS = ["#00C853", "#2196F3", "#FF9800", "#F44336"];
 
@@ -16,38 +20,51 @@ export function StorageForecastSlider() {
   const [pieChartData, setPieChartData] = useState<
     { name: string; value: number }[]
   >([]);
+  const [fetchDataFunction, setFetchDataFunction] = useState(() => getCurrentStorage);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const tabs = [
-    { id: "current", label: "Current" },
-    { id: "1day", label: "1 Day" },
-    { id: "1week", label: "1 Week" },
-    { id: "1month", label: "1 Month" },
-    { id: "3months", label: "3 Months" },
+    { id: "current", label: "Current", fetchFunction: getCurrentStorage },
+    { id: "1day", label: "1 Day", fetchFunction: getDailyPrediction },
+    { id: "1week", label: "1 Week", fetchFunction: getWeeklyPrediction },
+    { id: "1month", label: "1 Month", fetchFunction: getMonthlyPrediction },
+    { id: "3months", label: "3 Months", fetchFunction: get3MonthsPrediction },
   ];
 
   useEffect(() => {
-    async function fetchDailyPrediction() {
+    async function fetchData() {
+      setLoading(true); // Set loading to true before fetching
       try {
-        const data = await getDailyPrediction();
+        const data = await fetchDataFunction();
         const formattedData = Object.entries(data).map(([name, value]) => ({
           name,
           value: Number(value),
         }));
         setPieChartData(formattedData);
       } catch (error) {
-        console.error("Failed to fetch daily predictions:", error);
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     }
 
-    fetchDailyPrediction();
-  }, [activeTab]);
+    fetchData();
+  }, [fetchDataFunction]);
+
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    const selectedTab = tabs.find((tab) => tab.id === newTab);
+    if (selectedTab) {
+      setFetchDataFunction(() => selectedTab.fetchFunction);
+    }
+  };
 
   return (
     <div className="space-y-4">
       <Tabs
         defaultValue="current"
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={handleTabChange}
         className="w-full"
       >
         <div className="flex items-center justify-between mb-4">
@@ -74,7 +91,7 @@ export function StorageForecastSlider() {
                 );
                 const prevIndex =
                   (currentIndex - 1 + tabs.length) % tabs.length;
-                setActiveTab(tabs[prevIndex].id);
+                handleTabChange(tabs[prevIndex].id);
               }}
             >
               <ChevronLeft className="h-4 w-4 text-white" />
@@ -88,7 +105,7 @@ export function StorageForecastSlider() {
                   (tab) => tab.id === activeTab
                 );
                 const nextIndex = (currentIndex + 1) % tabs.length;
-                setActiveTab(tabs[nextIndex].id);
+                handleTabChange(tabs[nextIndex].id);
               }}
             >
               <ChevronRight className="h-4 w-4 text-white" />
@@ -102,32 +119,38 @@ export function StorageForecastSlider() {
               <Card className="border-slate-800 bg-slate-800/30">
                 <CardContent className="pt-6">
                   <div className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={pieChartData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={100}
-                          paddingAngle={5}
-                          dataKey="value"
-                          label={({ name, percent }) =>
-                            `${name} ${(percent * 100).toFixed(0)}%`
-                          }
-                          labelLine={false}
-                          animationDuration={1000} // Set animation duration to 1 second
-                        >
-                          {pieChartData.map((entry, i) => (
-                            <Cell
-                              key={`cell-${i}`}
-                              fill={COLORS[i % COLORS.length]}
-                            />
-                          ))}
-                        </Pie>
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    {loading ? ( // Show loading state
+                      <div className="flex items-center justify-center h-full">
+                        <p className="text-slate-400">Loading...</p>
+                      </div>
+                    ) : (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieChartData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={100}
+                            paddingAngle={5}
+                            dataKey="value"
+                            label={({ name, percent }) =>
+                              `${name} ${(percent * 100).toFixed(0)}%`
+                            }
+                            labelLine={false}
+                            animationDuration={1000}
+                          >
+                            {pieChartData.map((entry, i) => (
+                              <Cell
+                                key={`cell-${i}`}
+                                fill={COLORS[i % COLORS.length]}
+                              />
+                            ))}
+                          </Pie>
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </CardContent>
               </Card>

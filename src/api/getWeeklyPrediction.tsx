@@ -1,6 +1,5 @@
-// current storage consumed by all the 4 directories
-export async function getCurrentStorage() {
-  const url = "http://127.0.0.1:8000/predictions/current";
+export async function getWeeklyPrediction() {
+  const url = "http://127.0.0.1:8000/predictions/daily";
 
   try {
     const response = await fetch(url, {
