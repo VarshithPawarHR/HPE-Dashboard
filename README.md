@@ -1,10 +1,13 @@
-# 🖥️ Storage Forecasting Dashboard – Frontend (Next.js + TypeScript)
+# 🖥️ Storage Forecasting Dashboard – Frontend (Next.js + TypeScript) [HPE CPP Project]
 
 ## ⚠️ Read This First – Limitations & Scope
 
-This frontend is part of a larger **Proof of Concept (POC)** project for predicting file storage consumption using machine learning.
+This frontend is part of a larger **Proof of Concept (POC)** project for  predicting file storage consumption using machine learning.
 
-**Important:** The ML models powering this dashboard are trained on data specific to our internal storage system. **They are not generic models** that can be applied to any system without retraining. Storage usage behavior is unique to each environment, and your system will need its own models.
+**Important:** The ML models powering this dashboard are trained on data specific to our internal storage system. **They are not generic models** that cannot be applied to any system without retraining. Storage usage behavior is unique to each environment, and your system will need its own models.
+
+**The ML models built here are NOT direct to use or sell for systems.** You cannot expect them to work on just any storage setup. Machine Learning models are *context-specific* — they learn patterns from the system they're trained on.
+
 
 ---
 
@@ -32,6 +35,20 @@ Built using **Next.js** and **TypeScript**, the UI is clean, responsive, and fas
 - Integrated with backend APIs (FastAPI)
 
 ---
+
+## 🌐 Backend Overview
+
+The backend is built using *fastapi*  offering:
+
+- Live data ingestion and synthetic data simulation  
+- Storage forecasting using hybrid models consisting of *LSTM,GRU,conv1D*  
+- API services consumed by the frontend  
+- MongoDB database integration
+
+To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePrediction`.
+
+---
+
 
 ## 🚀 Getting Started
 
