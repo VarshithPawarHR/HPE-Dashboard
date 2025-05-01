@@ -1,55 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getDailyPrediction } from "@/api/getDailyPrediction";
 
 const COLORS = ["#00C853", "#2196F3", "#FF9800", "#F44336"];
 
-const forecastData = [
-  {
-    title: "Current Storage",
-    data: [
-      { name: "Used", value: 450 },
-      { name: "Available", value: 550 },
-    ],
-  },
-  {
-    title: "1 Day Forecast",
-    data: [
-      { name: "Used", value: 580 },
-      { name: "Available", value: 420 },
-    ],
-  },
-  {
-    title: "30 Day Forecast",
-    data: [
-      { name: "Used", value: 720 },
-      { name: "Available", value: 280 },
-    ],
-  },
-  {
-    title: "90 Day Forecast",
-    data: [
-      { name: "Used", value: 850 },
-      { name: "Available", value: 150 },
-    ],
-  },
-];
-
 export function StorageForecastSlider() {
   const [activeTab, setActiveTab] = useState("current");
+  const [pieChartData, setPieChartData] = useState<
+    { name: string; value: number }[]
+  >([]);
 
   const tabs = [
     { id: "current", label: "Current" },
-    { id: "30day", label: "1 Day" },
-    { id: "60day", label: "30 Days" },
-    { id: "90day", label: "90 Days" },
+    { id: "1day", label: "1 Day" },
+    { id: "1week", label: "1 Week" },
+    { id: "1month", label: "1 Month" },
+    { id: "3months", label: "3 Months" },
   ];
+
+  useEffect(() => {
+    async function fetchDailyPrediction() {
+      try {
+        const data = await getDailyPrediction();
+        const formattedData = Object.entries(data).map(([name, value]) => ({
+          name,
+          value: Number(value),
+        }));
+        setPieChartData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch daily predictions:", error);
+      }
+    }
+
+    fetchDailyPrediction();
+  }, [activeTab]);
 
   return (
     <div className="space-y-4">
@@ -105,7 +96,7 @@ export function StorageForecastSlider() {
           </div>
         </div>
 
-        {tabs.map((tab, index) => (
+        {tabs.map((tab) => (
           <TabsContent key={tab.id} value={tab.id} className="mt-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="border-slate-800 bg-slate-800/30">
@@ -114,7 +105,7 @@ export function StorageForecastSlider() {
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={forecastData[index].data}
+                          data={pieChartData}
                           cx="50%"
                           cy="50%"
                           innerRadius={60}
@@ -125,8 +116,9 @@ export function StorageForecastSlider() {
                             `${name} ${(percent * 100).toFixed(0)}%`
                           }
                           labelLine={false}
+                          animationDuration={1000} // Set animation duration to 1 second
                         >
-                          {forecastData[index].data.map((entry, i) => (
+                          {pieChartData.map((entry, i) => (
                             <Cell
                               key={`cell-${i}`}
                               fill={COLORS[i % COLORS.length]}
@@ -142,55 +134,30 @@ export function StorageForecastSlider() {
 
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-white">
-                  {forecastData[index].title}
+                  {tab.label} Storage Distribution
                 </h3>
                 <p className="text-slate-400">
-                  {index === 0
-                    ? "Current storage utilization shows your system is at 45% capacity with 550GB available."
-                    : `Based on current usage patterns, in ${
-                        index * 30
-                      } days your storage is projected to reach ${
-                        forecastData[index].data[0].value / 10
-                      }% capacity with ${
-                        forecastData[index].data[1].value
-                      }GB remaining.`}
+                  This chart shows the storage distribution across the four
+                  directories: Info, Scratch, Customer, and Projects for the{" "}
+                  {tab.label.toLowerCase()} forecast.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <Card className="border-slate-800 bg-slate-800/30">
-                    <CardContent className="p-4">
-                      <div className="text-sm text-slate-400">
-                        Total Capacity
-                      </div>
-                      <div className="text-2xl font-bold text-white">
-                        1000 GB
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-slate-800 bg-slate-800/30">
-                    <CardContent className="p-4">
-                      <div className="text-sm text-slate-400">Used Storage</div>
-                      <div className="text-2xl font-bold text-white">
-                        {forecastData[index].data[0].value} GB
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-slate-800 bg-slate-800/30">
-                    <CardContent className="p-4">
-                      <div className="text-sm text-slate-400">Available</div>
-                      <div className="text-2xl font-bold text-white">
-                        {forecastData[index].data[1].value} GB
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-slate-800 bg-slate-800/30">
-                    <CardContent className="p-4">
-                      <div className="text-sm text-slate-400">Growth Rate</div>
-                      <div className="text-2xl font-bold text-white">
-                        {index === 0 ? "N/A" : `${index * 4}%`}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  {pieChartData.map((entry) => (
+                    <Card
+                      key={entry.name}
+                      className="border-slate-800 bg-slate-800/30"
+                    >
+                      <CardContent className="p-4">
+                        <div className="text-sm text-slate-400">
+                          {entry.name}
+                        </div>
+                        <div className="text-2xl font-bold text-white">
+                          {entry.value} GB
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </div>
             </div>

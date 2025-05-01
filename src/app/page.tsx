@@ -1,27 +1,19 @@
 "use client";
 
-import { Bell, Waves } from "lucide-react";
+import { Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusCard } from "@/components/status-card";
-import { ResponseTimeChart } from "@/components/response-time-chart";
+import { ResponseTimeChart } from "@/components/line-plot";
 import { StorageForecastSlider } from "@/components/storage-forecast-slider";
-import { useState, useEffect } from "react";
 import { StorageConsumptionCard } from "@/components/storage-consumption-card";
 import { GrowthRateCard } from "@/components/growth-rate-card";
 import { SummaryCards } from "@/components/summary-cards";
+import { LiveTime } from "@/components/live-time";
+import { useState } from "react";
 
 export default function Dashboard() {
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [selectedDirectory, setSelectedDirectory] = useState("/info");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDateTime(new Date());
-    }, 1000);
-  
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#0f1520] text-slate-200">
@@ -44,33 +36,14 @@ export default function Dashboard() {
             variant="outline"
             className="gap-2 border-slate-700 bg-slate-800/50 text-slate-300 hover:bg-slate-800"
           >
-            <Bell className="h-4 w-4" />
-            Test Button
+            GitHub Repository
           </Button>
         </div>
 
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <StatusCard
             title="Current Date & Time"
-            status={
-              <div>
-                <div>
-                  {currentDateTime.toLocaleString("en-US", {
-                    weekday: "short",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </div>
-                <div>
-                  {currentDateTime.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </div>
-              </div>
-            }
+            status={<LiveTime />}
             statusColor="text-green-500"
             description="Today"
           />
@@ -89,19 +62,6 @@ export default function Dashboard() {
                 Live Storage Monitor
               </CardTitle>
             </div>
-            {/*
-            <select
-              className="h-8 rounded-md border border-slate-700 bg-slate-800 px-2 text-xs text-slate-400"
-              value={selectedDirectory}
-              onChange={(e) => setSelectedDirectory(e.target.value)}
-            >
-              <option value="/info">Info</option>
-              <option value="/scratch">Scratch</option>
-              <option value="/customer">Customer</option>
-              <option value="/projects">Project</option>
-            </select>
-            */}
-
             <div className="flex space-x-2">
               {[
                 { label: "Info", value: "/info" },
@@ -127,9 +87,7 @@ export default function Dashboard() {
             <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
               <StorageConsumptionCard directory={selectedDirectory} />
               <GrowthRateCard directory={selectedDirectory} />
-              <br/>
             </div>
-            
 
             <ResponseTimeChart directory={selectedDirectory} />
             <SummaryCards directory={selectedDirectory} />
