@@ -1,5 +1,6 @@
+import { BASE_URL } from "@/constants/config";
 export async function getMonthlyPrediction() {
-  const url = "http://127.0.0.1:8000/predictions/monthly";
+  const url = `${BASE_URL}predictions/monthly`;
 
   try {
     const response = await fetch(url, {

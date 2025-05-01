@@ -1,6 +1,8 @@
 // daily predictions for the 4 directories
+import { BASE_URL } from "@/constants/config";
+
 export async function getDailyPrediction() {
-  const url = "http://127.0.0.1:8000/predictions/daily";
+  const url = `${BASE_URL}predictions/daily`;
 
   try {
     const response = await fetch(url, {

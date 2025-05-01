@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 
 export function LiveTime() {
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [currentDateTime, setCurrentDateTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    setCurrentDateTime(new Date());
+
     const interval = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, []);
+
+  if (!currentDateTime) {
+    return null;
+  }
 
   return (
     <div>

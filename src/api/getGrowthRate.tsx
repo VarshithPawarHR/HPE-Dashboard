@@ -1,6 +1,8 @@
 // Gets the growth rate for the specified directory for the last 24 hours
+import { BASE_URL } from "@/constants/config";
+
 export async function getGrowthRate(directory: string) {
-  const url = `http://127.0.0.1:8000/growth-rate?directory=${encodeURIComponent(
+  const url = `${BASE_URL}growth-rate?directory=${encodeURIComponent(
     directory
   )}`;
 

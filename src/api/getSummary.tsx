@@ -1,7 +1,7 @@
 // a function to fetch sumamry (past 15 minutes data) from the server
-
+import { BASE_URL } from "@/constants/config";
 export async function getSummary(directory: string) {
-  const url = `http://127.0.0.1:8000/summary?directory=${encodeURIComponent(directory)}`;
+  const url = `${BASE_URL}summary?directory=${encodeURIComponent(directory)}`;
 
   try {
     const response = await fetch(url, {

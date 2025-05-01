@@ -1,6 +1,8 @@
+import { BASE_URL } from "@/constants/config";
+
 // fetches past few data points for the line graph
 export async function getLineGraph(directory: string) {
-  const url = `http://127.0.0.1:8000/directory-usage?directory=${encodeURIComponent(
+  const url = `${BASE_URL}directory-usage?directory=${encodeURIComponent(
     directory
   )}`;
 
