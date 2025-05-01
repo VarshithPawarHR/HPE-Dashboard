@@ -1,5 +1,5 @@
 // Gets the growth rate for the specified directory for the last 24 hours
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function getGrowthRate(directory: string) {
   const url = `${BASE_URL}growth-rate?directory=${encodeURIComponent(

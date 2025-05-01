@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 // fetches past few data points for the line graph
 export async function getLineGraph(directory: string) {

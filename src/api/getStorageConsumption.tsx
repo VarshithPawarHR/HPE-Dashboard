@@ -1,5 +1,5 @@
 // Gets the total storage consumption for the specified directory
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 export async function getStorageConsumption(directory: string) {
   const url = `${BASE_URL}total-consumption?directory=${encodeURIComponent(directory)}`;
 

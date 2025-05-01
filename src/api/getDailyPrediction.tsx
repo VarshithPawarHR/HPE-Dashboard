@@ -1,5 +1,5 @@
 // daily predictions for the 4 directories
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function getDailyPrediction() {
   const url = `${BASE_URL}predictions/daily`;

@@ -1,5 +1,5 @@
 // a function to fetch sumamry (past 15 minutes data) from the server
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 export async function getSummary(directory: string) {
   const url = `${BASE_URL}summary?directory=${encodeURIComponent(directory)}`;
 

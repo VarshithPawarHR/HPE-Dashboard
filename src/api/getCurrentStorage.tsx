@@ -1,5 +1,5 @@
 // current storage consumed by all the 4 directories
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function getCurrentStorage() {
   const url = `${BASE_URL}predictions/current`;

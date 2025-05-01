@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function get3MonthsPrediction() {
   const url = `${BASE_URL}predictions/3_months`;

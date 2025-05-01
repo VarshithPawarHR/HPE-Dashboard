@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "@/constants/config";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export type CategoryRequestData = {
   [key: string]: number;

@@ -35,6 +35,11 @@ export default function Dashboard() {
           <Button
             variant="outline"
             className="gap-2 border-slate-700 bg-slate-800/50 text-slate-300 hover:bg-slate-800"
+            onClick={() =>
+              window.open(
+                "https://github.com/VarshithPawarHR/HPE-StoragePrediction"
+              )
+            }
           >
             GitHub Repository
           </Button>
