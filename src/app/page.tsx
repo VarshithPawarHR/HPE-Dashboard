@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { StatusCard } from "@/components/status-card";
 import { ResponseTimeChart } from "@/components/response-time-chart";
 import { StorageForecastSlider } from "@/components/storage-forecast-slider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StorageConsumptionCard } from "@/components/storage-consumption-card";
 import { GrowthRateCard } from "@/components/growth-rate-card";
 import { SummaryCards } from "@/components/summary-cards";
@@ -15,13 +15,13 @@ export default function Dashboard() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [selectedDirectory, setSelectedDirectory] = useState("/info");
 
-  useState(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 1000);
-
+  
     return () => clearInterval(interval);
-  });
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0f1520] text-slate-200">
