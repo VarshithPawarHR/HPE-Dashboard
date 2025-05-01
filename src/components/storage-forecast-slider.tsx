@@ -12,6 +12,7 @@ import { getDailyPrediction } from "@/api/getDailyPrediction";
 import { getWeeklyPrediction } from "@/api/getWeeklyPrediction";
 import { getMonthlyPrediction } from "@/api/getMontlyPrediction";
 import { get3MonthsPrediction } from "@/api/get3MonthsPrediction";
+import { getCategory } from "@/api/getCategory";
 
 const COLORS = ["#00C853", "#2196F3", "#FF9800", "#F44336"];
 
@@ -20,8 +21,11 @@ export function StorageForecastSlider() {
   const [pieChartData, setPieChartData] = useState<
     { name: string; value: number }[]
   >([]);
-  const [fetchDataFunction, setFetchDataFunction] = useState(() => getCurrentStorage);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [fetchDataFunction, setFetchDataFunction] = useState(
+    () => getCurrentStorage
+  );
+  const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState<string>(""); // Storage consumption status
 
   const tabs = [
     { id: "current", label: "Current", fetchFunction: getCurrentStorage },
@@ -33,7 +37,7 @@ export function StorageForecastSlider() {
 
   useEffect(() => {
     async function fetchData() {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
       try {
         const data = await fetchDataFunction();
         const formattedData = Object.entries(data).map(([name, value]) => ({
@@ -41,10 +45,12 @@ export function StorageForecastSlider() {
           value: Number(value),
         }));
         setPieChartData(formattedData);
+        const categoryResponse = await getCategory(data);
+        setCategory(categoryResponse.overall_category);
       } catch (error) {
-        console.error("Failed to fetch data:", error);
+        console.error("Failed to fetch data or category:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     }
 
@@ -159,12 +165,6 @@ export function StorageForecastSlider() {
                 <h3 className="text-xl font-semibold text-white">
                   {tab.label} Storage Distribution
                 </h3>
-                <p className="text-slate-400">
-                  This chart shows the storage distribution across the four
-                  directories: Info, Scratch, Customer, and Projects for the{" "}
-                  {tab.label.toLowerCase()} forecast.
-                </p>
-
                 <div className="grid grid-cols-2 gap-4">
                   {pieChartData.map((entry) => (
                     <Card
@@ -182,6 +182,33 @@ export function StorageForecastSlider() {
                     </Card>
                   ))}
                 </div>
+                {activeTab !== "current" && (
+                  <div className="mt-4">
+                    {loading ? (
+                      <p className="text-slate-400">Loading...</p>
+                    ) : (
+                      <>
+                      <p className="text-sm text-slate-400">
+                        Storage consumption status:
+                      </p>
+                      <p
+                      className={`text-2xl font-bold ${
+                        category === "low"
+                          ? "text-green-500"
+                          : category === "moderate"
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {category.toUpperCase()}
+                    </p>
+                      </>
+                      
+                      
+                    )}
+                    
+                  </div>
+                )}
               </div>
             </div>
           </TabsContent>

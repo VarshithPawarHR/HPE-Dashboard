@@ -1,5 +1,5 @@
 export async function get3MonthsPrediction() {
-  const url = "http://127.0.0.1:8000/predictions/daily";
+  const url = "http://127.0.0.1:8000/predictions/3_months";
 
   try {
     const response = await fetch(url, {

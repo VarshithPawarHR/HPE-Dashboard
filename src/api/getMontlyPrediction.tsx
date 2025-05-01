@@ -1,5 +1,5 @@
 export async function getMonthlyPrediction() {
-  const url = "http://127.0.0.1:8000/predictions/daily";
+  const url = "http://127.0.0.1:8000/predictions/monthly";
 
   try {
     const response = await fetch(url, {
@@ -10,7 +10,9 @@ export async function getMonthlyPrediction() {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch daily predictions: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch daily predictions: ${response.status} ${response.statusText}`
+      );
     }
 
     const result = await response.json();
