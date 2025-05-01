@@ -11,30 +11,36 @@ import {
 } from "recharts";
 import { getLineGraph } from "@/api/getLineGraph";
 
-interface ResponseTimeChartProps {
-  directory: string;
-}
-
-export function ResponseTimeChart({ directory }: ResponseTimeChartProps) {
+export function ResponseTimeChart({ directory }: { directory: string }) {
   const [chartData, setChartData] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getLineGraph(directory);
-        const formattedData = data.data
-          .map((item: { timestamp: string; storage_gb: number }) => ({
-            time: new Date(item.timestamp).toISOString(),
-            storage: item.storage_gb,
-          }))
-          .reverse();
-        setChartData(formattedData);
-      } catch (error) {
+  const fetchData = () => {
+    getLineGraph(directory)
+      .then((data) => {
+        if (data && data.data) {
+          const formattedData = data.data
+            .map((item: { timestamp: string | number | Date; storage_gb: string | number }) => ({
+              time: new Date(item.timestamp).toISOString(),
+              storage: item.storage_gb,
+            }))
+            .reverse();
+          setChartData(formattedData);
+        }
+      })
+      .catch((error) => {
         console.error("Failed to fetch line graph data:", error);
-      }
-    }
+      });
+  };
 
+  useEffect(() => {
     fetchData();
+
+    const intervalId = setInterval(() => {
+      console.log("Fetching data...");
+      fetchData();
+    }, 30 * 1000);
+
+    return () => clearInterval(intervalId);
   }, [directory]);
 
   return (

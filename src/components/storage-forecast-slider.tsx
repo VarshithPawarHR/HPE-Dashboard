@@ -45,7 +45,10 @@ export function StorageForecastSlider() {
           value: Number(value),
         }));
         setPieChartData(formattedData);
-        const categoryResponse = await getCategory(data);
+        let categoryResponse = { overall_category: "" };
+        if (activeTab !== "current" && activeTab !== "1day") {
+          categoryResponse = await getCategory(data);
+        }
         setCategory(categoryResponse.overall_category);
       } catch (error) {
         console.error("Failed to fetch data or category:", error);
@@ -55,7 +58,7 @@ export function StorageForecastSlider() {
     }
 
     fetchData();
-  }, [fetchDataFunction]);
+  }, [activeTab, fetchDataFunction]);
 
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
@@ -203,10 +206,7 @@ export function StorageForecastSlider() {
                       {category.toUpperCase()}
                     </p>
                       </>
-                      
-                      
                     )}
-                    
                   </div>
                 )}
               </div>

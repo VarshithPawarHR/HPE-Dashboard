@@ -88,7 +88,6 @@ export default function Dashboard() {
               <StorageConsumptionCard directory={selectedDirectory} />
               <GrowthRateCard directory={selectedDirectory} />
             </div>
-
             <ResponseTimeChart directory={selectedDirectory} />
             <SummaryCards directory={selectedDirectory} />
           </CardContent>
