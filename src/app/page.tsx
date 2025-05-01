@@ -45,19 +45,19 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-1">
           <StatusCard
             title="Current Date & Time"
             status={<LiveTime />}
             statusColor="text-green-500"
             description="Today"
           />
-          <StatusCard
+          {/* <StatusCard
             title="Last Updation"
             status="5 minutes ago"
             statusColor="text-white"
             description="Data is inserted every 15 minutes"
-          />
+          /> */}
         </div>
 
         <Card className="mb-6 border-slate-800 bg-[#131926]">
