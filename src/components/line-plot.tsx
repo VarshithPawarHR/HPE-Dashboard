@@ -38,7 +38,7 @@ export function ResponseTimeChart({ directory }: { directory: string }) {
     const intervalId = setInterval(() => {
       console.log("Fetching data...");
       fetchData();
-    }, 30 * 1000);
+    }, 5 * 60 * 1000); // 5 minutes in milliseconds
 
     return () => clearInterval(intervalId);
   }, [directory]);
