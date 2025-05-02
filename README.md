@@ -1,4 +1,4 @@
-# Storage Forecasting Dashboard – Frontend (Next.js + TypeScript) [HPE CPP Project]
+# Storage Forecasting Dashboard – Frontend (Next.js + TypeScript)
 
 ## Read This First – Limitations & Scope
 
