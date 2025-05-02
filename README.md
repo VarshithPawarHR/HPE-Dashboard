@@ -1,3 +1,70 @@
+# Storage Forecasting Dashboard – Frontend (Next.js + TypeScript)
+
+## Read This First – Limitations & Scope
+
+This frontend is part of a larger **Proof of Concept (POC)** project for  predicting file storage consumption using machine learning.
+
+**Important:** The ML models powering this dashboard are trained on data specific to our internal storage system. **They are not generic models** that cannot be applied to any system without retraining. Storage usage behavior is unique to each environment, and your system will need its own models.
+
+**The ML models built here are NOT direct to use or sell for systems.** You cannot expect them to work on just any storage setup. Machine Learning models are *context-specific* — they learn patterns from the system they're trained on.
+
+
+---
+
+## 🧠 What This Project Is
+
+This frontend serves as a user interface for visualizing:
+
+- Real-time storage usage
+- Forecast predictions for:
+  - 📅 Next Day
+  - 📈 Next Week
+  - 📆 Next Month
+  - 📊 Next 3 Months
+
+Built using **Next.js** and **TypeScript**, the UI is clean, responsive, and fast.
+
+---
+
+## 🌐 Key Features
+
+- Real-time dashboard with auto-refreshing data
+- Graphs and stats per directory
+- Time-series visualizations of predicted usage
+- Responsive design for both desktop and mobile
+- Integrated with backend APIs (FastAPI)
+
+---
+
+## 🌐 Backend Overview
+
+The backend is built using *fastapi*  offering:
+
+- Live data ingestion and synthetic data simulation  
+- Storage forecasting using hybrid models consisting of *LSTM,GRU,conv1D*  
+- API services consumed by the frontend  
+- MongoDB database integration
+
+To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePrediction`.
+
+---
+
+
+## 🚀 Getting Started
+
+### 🔧 Prerequisites
+
+- Node.js: **v18.x**
+- Package Manager: **npm** or **yarn**
+
+### 📦 Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
