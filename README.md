@@ -1,6 +1,6 @@
-# 🖥️ Storage Forecasting Dashboard – Frontend (Next.js + TypeScript) [HPE CPP Project]
+# Storage Forecasting Dashboard – Frontend (Next.js + TypeScript) [HPE CPP Project]
 
-## ⚠️ Read This First – Limitations & Scope
+## Read This First – Limitations & Scope
 
 This frontend is part of a larger **Proof of Concept (POC)** project for  predicting file storage consumption using machine learning.
 
