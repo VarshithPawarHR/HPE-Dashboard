@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusCard } from "@/components/status-card";
 import { ResponseTimeChart } from "@/components/line-plot";
+import { ResponseTimeChart1week } from "@/components/lineplot1week";
+import { ResponseTimeChart1month } from "@/components/lineplot1month";
+import { ResponseTimeChart3month } from "@/components/lineplot3month";
 import { StorageForecastSlider } from "@/components/storage-forecast-slider";
 import { StorageConsumptionCard } from "@/components/storage-consumption-card";
 import { GrowthRateCard } from "@/components/growth-rate-card";
@@ -59,7 +62,7 @@ export default function Dashboard() {
             description="Data is inserted every 15 minutes"
           /> */}
         </div>
-
+        {/* Live Storage Monitor Card */}
         <Card className="mb-6 border-slate-800 bg-[#131926]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div className="flex items-center gap-2">
@@ -98,7 +101,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-800 bg-[#131926]">
+        {/* Storage Forecasting Card */}
+        <Card className="border-slate-800 bg-[#131926] mb-6">
           <CardHeader>
             <CardTitle className="text-base font-medium text-slate-300">
               Storage Forecasting
@@ -108,6 +112,78 @@ export default function Dashboard() {
             <StorageForecastSlider />
           </CardContent>
         </Card>
+
+       {/* Line Graph Card */}
+<Card className="mb-6 border-slate-800 bg-[#131926]">
+  <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <div className="flex items-center gap-2">
+      <CardTitle className="text-base font-medium text-slate-300">
+        Storage Prediction Line Graphs
+      </CardTitle>
+    </div>
+    <div className="flex space-x-2">
+      {[{ label: "Info", value: "/info" }, { label: "Scratch", value: "/scratch" }, { label: "Customer", value: "/customer" }, { label: "Project", value: "/projects" }].map((item) => (
+        <button
+          key={item.value}
+          onClick={() => setSelectedDirectory(item.value)}
+          className={`px-4 py-1 text-xs rounded-md border transition-all duration-200 ${
+            selectedDirectory === item.value
+              ? "bg-slate-700 text-white border-slate-600"
+              : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
+  </CardHeader>
+  <CardContent>
+    {/* 1-Week Storage Prediction */}
+    <div className="mb-6">
+      <Card className="border-slate-800 bg-[#131926]">
+        <CardHeader>
+          <CardTitle className="text-base font-medium text-slate-300">
+            1-Week
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponseTimeChart1week directory={selectedDirectory} />
+        </CardContent>
+      </Card>
+    </div>
+
+    {/* 1-Month Storage Prediction */}
+    <div className="mb-6">
+      <Card className="border-slate-800 bg-[#131926]">
+        <CardHeader>
+          <CardTitle className="text-base font-medium text-slate-300">
+            1-Month 
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponseTimeChart1month directory={selectedDirectory} />
+        </CardContent>
+      </Card>
+    </div>
+
+    {/* 3-Month Storage Prediction */}
+    <div className="mb-6">
+      <Card className="border-slate-800 bg-[#131926]">
+        <CardHeader>
+          <CardTitle className="text-base font-medium text-slate-300">
+            3-Month 
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponseTimeChart3month directory={selectedDirectory} />
+        </CardContent>
+      </Card>
+    </div>
+  </CardContent>
+</Card>
+
+      
+
       </main>
     </div>
   );
