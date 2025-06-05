@@ -57,12 +57,22 @@ To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePr
 - Node.js: **v18.x**
 - Package Manager: **npm** or **yarn**
 
+### 🔧 Setup environmental Variables
+
+```bash
+NEXT_PUBLIC_API_URL= 
+MONGO_URL =
+MONGO_DB = 
+MONGO_COLLECTION = 
+```
+
 ### 📦 Install Dependencies
 
 ```bash
 npm install
 # or
 yarn install
+
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
