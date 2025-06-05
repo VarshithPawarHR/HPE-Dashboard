@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,28 @@ import { StorageConsumptionCard } from "@/components/storage-consumption-card";
 import { GrowthRateCard } from "@/components/growth-rate-card";
 import { SummaryCards } from "@/components/summary-cards";
 import { LiveTime } from "@/components/live-time";
-import { useState } from "react";
 
 export default function Dashboard() {
-  // Separate states
-  const [liveDirectory, setLiveDirectory] = useState("/info");
-  const [predictionDirectory, setPredictionDirectory] = useState("/info");
+  const [directories, setDirectories] = useState<string[]>([]);
+  const [liveDirectory, setLiveDirectory] = useState("");
+  const [predictionDirectory, setPredictionDirectory] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("1week");
+
+  useEffect(() => {
+    const fetchDirectories = async () => {
+      try {
+        const res = await fetch("/api/directories");
+        const data = await res.json();
+        setDirectories(data.directories || []);
+        setLiveDirectory(data.directories[0]);
+        setPredictionDirectory(data.directories[0]);
+      } catch (err) {
+        console.error("Failed to fetch directories", err);
+      }
+    };
+
+    fetchDirectories();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0f1520] text-slate-200">
@@ -31,7 +47,7 @@ export default function Dashboard() {
               <Waves className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="flex items-center gap-2 text-xl font-semibold text-white">
+              <h1 className="text-xl font-semibold text-white">
                 Storage Monitoring System
               </h1>
               <p className="text-sm text-slate-400">
@@ -51,7 +67,7 @@ export default function Dashboard() {
         </div>
 
         {/* Live Time Card */}
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-1">
+        <div className="mb-6 grid grid-cols-1 gap-4">
           <StatusCard
             title="Current Date & Time"
             status={<LiveTime />}
@@ -60,37 +76,30 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* 🔵 LIVE MONITORING SECTION */}
+        {/* 🔵 Live Monitoring */}
         <Card className="mb-6 border-slate-800 bg-[#131926]">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-base font-medium text-slate-300">
-                Live Storage Monitor
-              </CardTitle>
-            </div>
+          <CardHeader className="flex flex-row justify-between pb-2">
+            <CardTitle className="text-base font-medium text-slate-300">
+              Live Storage Monitor
+            </CardTitle>
             <div className="flex space-x-2">
-              {[
-                { label: "Info", value: "/info" },
-                { label: "Scratch", value: "/scratch" },
-                { label: "Customer", value: "/customer" },
-                { label: "Project", value: "/projects" },
-              ].map((item) => (
+              {directories.map((dir) => (
                 <button
-                  key={item.value}
-                  onClick={() => setLiveDirectory(item.value)}
+                  key={dir}
+                  onClick={() => setLiveDirectory(dir)}
                   className={`px-4 py-1 text-xs rounded-md border transition-all duration-200 ${
-                    liveDirectory === item.value
+                    liveDirectory === dir
                       ? "bg-slate-700 text-white border-slate-600"
                       : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
                   }`}
                 >
-                  {item.label}
+                  {dir.replace("/", "").toUpperCase()}
                 </button>
               ))}
             </div>
           </CardHeader>
           <CardContent>
-            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <StorageConsumptionCard directory={liveDirectory} />
               <GrowthRateCard directory={liveDirectory} />
             </div>
@@ -99,8 +108,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* 🔮 STORAGE FORECASTING SLIDER */}
-        <Card className="border-slate-800 bg-[#131926] mb-6">
+        {/* 🔮 Forecast Slider */}
+        <Card className="mb-6 border-slate-800 bg-[#131926]">
           <CardHeader>
             <CardTitle className="text-base font-medium text-slate-300">
               Storage Forecasting
@@ -111,31 +120,24 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* 📊 PREDICTION SECTION */}
+        {/* 📊 Prediction Section */}
         <Card className="mb-6 border-slate-800 bg-[#131926]">
-          <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 gap-3">
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-base font-medium text-slate-300">
-                Storage Prediction Line Graphs
-              </CardTitle>
-            </div>
+          <CardHeader className="flex flex-col md:flex-row justify-between pb-2 gap-3">
+            <CardTitle className="text-base font-medium text-slate-300">
+              Storage Prediction Line Graphs
+            </CardTitle>
             <div className="flex flex-wrap gap-2">
-              {[
-                { label: "Info", value: "/info" },
-                { label: "Scratch", value: "/scratch" },
-                { label: "Customer", value: "/customer" },
-                { label: "Project", value: "/projects" },
-              ].map((item) => (
+              {directories.map((dir) => (
                 <button
-                  key={item.value}
-                  onClick={() => setPredictionDirectory(item.value)}
+                  key={dir}
+                  onClick={() => setPredictionDirectory(dir)}
                   className={`px-4 py-1 text-xs rounded-md border transition-all duration-200 ${
-                    predictionDirectory === item.value
+                    predictionDirectory === dir
                       ? "bg-slate-700 text-white border-slate-600"
                       : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
                   }`}
                 >
-                  {item.label}
+                  {dir.replace("/", "").toUpperCase()}
                 </button>
               ))}
             </div>
