@@ -57,6 +57,39 @@ To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePr
 * Node.js **v18**
 * A package manager (`npm` or `yarn`)
 
+---
+
+### 🛠️ How to Install Node.js and NPM
+#### Windows
+
+1. **Download the Installer**
+   
+   - Visit [nodejs.org](https://nodejs.org/)  
+   - Download the **Windows LTS** version 
+2. **Run the Installer**
+   
+   - Launch the downloaded `.msi` file  
+   - Accept the license, use default settings  
+   - Ensure **“Add to PATH”** is checked  
+   - Click **Install**, then **Finish**  
+3. **Verify Installation**
+   
+   ```bash
+   node -v  
+   npm -v    
+
+#### Linux
+1. **Update your system package list**
+   
+   ```bash
+   sudo apt update
+   sudo apt install -y nodejs npm
+2.  **Verify Installation**
+   
+     ```bash
+     node -v  
+     npm -v 
+
 ### 1. Clone the Repository
 
 ```bash
