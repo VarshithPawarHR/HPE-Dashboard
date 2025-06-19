@@ -52,44 +52,54 @@ To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePr
 
 ## 🚀 Getting Started
 
-### 🔧 Prerequisites
+### Requirements
 
-- Node.js: **v18.x**
-- Package Manager: **npm** or **yarn**
+* Node.js **v18**
+* A package manager (`npm` or `yarn`)
 
-### 🔧 Setup environmental Variables
+### 1. Clone the Repository
 
 ```bash
-NEXT_PUBLIC_API_URL= 
-MONGO_URL =
-MONGO_DB = 
-MONGO_COLLECTION = 
+git clone https://github.com/VarshithPawarHR/HPE-Dashboard
+cd HPE-Dashboard
 ```
 
-### 📦 Install Dependencies
+### 2. Set Environment Variables
+
+Create a `.env` file inside the HPE-Dashboard folder (refer `.env.example`):
+
+```bash
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/
+
+```
+
+### 3. Install Dependencies
 
 ```bash
 npm install
 # or
 yarn install
+```
 
-
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+### 4. Run the Frontend
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+
+Dashboard will be available at: `http://localhost:3000`
+
+---
+
+## Summary
+
+* **Backend** runs on `http://127.0.0.1:8000`
+* **Frontend** runs on `http://localhost:3000`
+* Connected via REST APIs
+
+Once both are running, navigate to the dashboard to view real-time storage forecasts.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
