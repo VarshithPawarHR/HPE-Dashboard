@@ -50,7 +50,7 @@ To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePr
 ---
 
 
-## 🚀 Getting Started
+## 🚀 Getting started with frontend set up
 
 ### Requirements
 
