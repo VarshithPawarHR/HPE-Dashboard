@@ -54,7 +54,7 @@ To set up the backend, see the `https://github.com/VarshithPawarHR/HPE-StoragePr
 
 ### Requirements
 
-* Node.js **v18**
+* Node.js 
 * A package manager (`npm` or `yarn`)
 
 ---
