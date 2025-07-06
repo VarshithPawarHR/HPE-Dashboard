@@ -21,19 +21,19 @@ export function ResponseTimeChart1week({ directory }: { directory: string }) {
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
 
   // Function to convert UTC timestamp to IST (Indian Standard Time)
-  const convertToIST = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    };
-    return date.toLocaleString("en-IN", options);
-  };
+  // const convertToIST = (timestamp: string) => {
+  //   const date = new Date(timestamp);
+  //   const options: Intl.DateTimeFormatOptions = {
+  //     timeZone: "Asia/Kolkata",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     hour12: true,
+  //     day: "2-digit",
+  //     month: "short",
+  //     year: "numeric",
+  //   };
+  //   return date.toLocaleString("en-IN", options);
+  // };
 
   const fetchData = () => {
     console.log("Fetching for directory:", directory);

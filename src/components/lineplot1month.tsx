@@ -20,14 +20,14 @@ type ChartPoint = {
 export function ResponseTimeChart1month({ directory }: { directory: string }) {
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
 
-  const convertToISTDate = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleDateString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      day: "2-digit",
-      month: "short",
-    });
-  };
+  // const convertToISTDate = (timestamp: string) => {
+  //   const date = new Date(timestamp);
+  //   return date.toLocaleDateString("en-IN", {
+  //     timeZone: "Asia/Kolkata",
+  //     day: "2-digit",
+  //     month: "short",
+  //   });
+  // };
 
   const fetchData = () => {
     console.log("Fetching for directory:", directory);
