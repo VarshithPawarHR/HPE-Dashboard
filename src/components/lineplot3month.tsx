@@ -1,17 +1,16 @@
 "use client";
 
+import { getLineGraph3month } from "@/api/getLineGraph3month";
 import { useEffect, useState } from "react";
 import {
-  LineChart,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import { getLineGraph3month } from "@/api/getLineGraph3month"; // Ensure you fetch 3-month data
 
-// Define the expected data type
 type ChartPoint = {
   time: string;
   storage: number;
@@ -20,19 +19,9 @@ type ChartPoint = {
 export function ResponseTimeChart3month({ directory }: { directory: string }) {
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
 
-  const convertToISTDate = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleDateString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      day: "2-digit",
-      month: "short",
-    });
-  };
-
   const fetchData = () => {
     console.log("Fetching for directory:", directory);
 
-    // Fetch 3 months' worth of data
     getLineGraph3month(directory)
       .then((data) => {
         console.log("Raw data received:", data);
@@ -46,9 +35,9 @@ export function ResponseTimeChart3month({ directory }: { directory: string }) {
           const formattedData = values.map(
             (item: { predicted_value: number }, index: number) => {
               const futureDate = new Date(today);
-              futureDate.setDate(today.getDate() + index); // <-- FORWARD in time
+              futureDate.setTime(today.getTime() + index * 4 * 60 * 60 * 1000); // 4-hour intervals
               return {
-                time: convertToISTDate(futureDate.toISOString()),
+                time: futureDate.toISOString(),
                 storage: item.predicted_value,
               };
             }
@@ -82,9 +71,16 @@ export function ResponseTimeChart3month({ directory }: { directory: string }) {
         <LineChart data={chartData}>
           <XAxis
             dataKey="time"
-            interval={26} // Adjust this interval to reduce congestion over 3 months
-            angle={-360} // Rotate labels for better readability
-            textAnchor="end" // Align the labels
+            interval={59} // every 10 days (10 days = 60 points if each is 4 hours)
+            tickFormatter={(time) =>
+              new Date(time).toLocaleDateString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "2-digit",
+                month: "short",
+              })
+            }
+            angle={0}
+            textAnchor="end"
             label={{ value: "Date", position: "insideBottom", offset: -5 }}
           />
           <YAxis
@@ -96,6 +92,16 @@ export function ResponseTimeChart3month({ directory }: { directory: string }) {
             domain={["auto", "auto"]}
           />
           <Tooltip
+            labelFormatter={(time) =>
+              new Date(time).toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "2-digit",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            }
             formatter={(value) => [`${value} GB`, "Storage"]}
           />
           <Line

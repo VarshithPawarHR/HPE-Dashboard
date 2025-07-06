@@ -1,15 +1,15 @@
 "use client";
 
+import { getLineGraph1week } from "@/api/getLineGraph1week";
 import { useEffect, useState } from "react";
 import {
-  LineChart,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import { getLineGraph1week } from "@/api/getLineGraph1week";
 
 // Define the expected data type
 type ChartPoint = {
@@ -42,18 +42,22 @@ export function ResponseTimeChart1week({ directory }: { directory: string }) {
       .then((data) => {
         console.log("Raw data received:", data);
 
-        const key = directory.replace("/", ""); // e.g., "/projects" → "projects"
+        const key = directory.replace("/", "");
         const values = data[key];
 
         if (values && Array.isArray(values)) {
-          const formattedData = values.map((item: { predicted_value: number }, index: number) => {
-            // Calculate future time (current time + index hours)
-            const rawTime = new Date(Date.now() + index * 3600 * 1000).toISOString(); // Add hours for future predictions
+          const intervalHours = 4;
+
+          const formattedData = values.map((item, index) => {
+            const rawTime = new Date(Date.now() + index * intervalHours * 3600 * 1000);
             return {
-              time: convertToIST(rawTime), // Convert to IST format
+              time: rawTime.toISOString(),  // Keep full timestamp for flexibility
               storage: item.predicted_value,
             };
           });
+          
+          
+          
 
           console.log("Formatted chart data:", formattedData);
           setChartData(formattedData);
@@ -84,15 +88,13 @@ export function ResponseTimeChart1week({ directory }: { directory: string }) {
           <XAxis
             dataKey="time"
             tickFormatter={(time) => {
-              // Extract and return only the time (HH:mm AM/PM)
-              const timeOnly = new Date(time).toLocaleTimeString("en-IN", {
+              return new Date(time).toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
                 timeZone: "Asia/Kolkata",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
               });
-              return timeOnly;
             }}
+            
             interval={5}
             label={{ value: "Time", position: "insideBottom", offset: -5 }}
           />

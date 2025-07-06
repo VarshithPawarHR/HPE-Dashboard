@@ -1,15 +1,15 @@
 "use client";
 
+import { getLineGraph1month } from "@/api/getLineGraph1month";
 import { useEffect, useState } from "react";
 import {
-  LineChart,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import { getLineGraph1month } from "@/api/getLineGraph1month";
 
 // Define the expected data type
 type ChartPoint = {
@@ -45,9 +45,9 @@ export function ResponseTimeChart1month({ directory }: { directory: string }) {
           const formattedData = values.map(
             (item: { predicted_value: number }, index: number) => {
               const futureDate = new Date(today);
-              futureDate.setDate(today.getDate() + index); // <-- FORWARD in time
+              futureDate.setTime(today.getTime() + index * 4 * 60 * 60 * 1000); // 4-hour interval
               return {
-                time: convertToISTDate(futureDate.toISOString()),
+                time: futureDate.toISOString(), // store full ISO timestamp
                 storage: item.predicted_value,
               };
             }
@@ -81,9 +81,16 @@ export function ResponseTimeChart1month({ directory }: { directory: string }) {
         <LineChart data={chartData}>
           <XAxis
             dataKey="time"
-            interval={8} // Show every 3rd date to reduce congestion
-            angle={-360} // Rotate labels for better readability
-            textAnchor="end" // Align the labels
+            interval={11} // Show every 12th data point (every 2 days)
+            tickFormatter={(time) =>
+              new Date(time).toLocaleDateString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "2-digit",
+                month: "short",
+              })
+            }
+            angle={0}
+            textAnchor="end"
             label={{ value: "Date", position: "insideBottom", offset: -5 }}
           />
           <YAxis
@@ -95,6 +102,16 @@ export function ResponseTimeChart1month({ directory }: { directory: string }) {
             domain={["auto", "auto"]}
           />
           <Tooltip
+            labelFormatter={(time) =>
+              new Date(time).toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                day: "2-digit",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            }
             formatter={(value) => [`${value} GB`, "Storage"]}
           />
           <Line
